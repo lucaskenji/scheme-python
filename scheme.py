@@ -8,4 +8,5 @@ def read(user_input):
 def evaluate(expression):
     pass
 
-repl()
+if __name__ == "__main__":
+    repl()
