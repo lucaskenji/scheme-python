@@ -1,4 +1,5 @@
 def repl():
+    # Read-eval-print-loop: loops until the program is exited. Receives user input and returns the result of the expression
     while True:
         print(evaluate(read(input('> '))))
 
@@ -65,6 +66,12 @@ def read(user_input):
     return parsed_exp
 
 def evaluate(expression):
+    # Receives an expression and returns its result
+    # ["+", "1", "2"] ==> "3"
+    pass
+
+def apply(procedure, arguments):
+    # Receives a procedure with its arguments and return the result of the applied function
     pass
 
 if __name__ == "__main__":
