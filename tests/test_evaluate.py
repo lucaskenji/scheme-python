@@ -5,7 +5,7 @@ from scheme import evaluate
 
 def test_eval_single():
     # Expects single values to be evaluated
-    assert evaluate(["+"]) == "<PrimitiveProcedure '+'>"
+    assert evaluate(["+"]) == "+"
     assert evaluate(["1"]) == "1"
 
 def test_eval_proc_call():
