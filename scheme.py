@@ -68,6 +68,10 @@ def read(user_input):
 def evaluate(expression):
     # Receives an expression and returns its result
     # ["+", "1", "2"] ==> "3"
+    if len(expression) == 1:
+        return expression[0]
+    
+    
     pass
 
 def apply(procedure, arguments):
