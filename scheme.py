@@ -1,3 +1,5 @@
+from primitives import primitives
+
 def repl():
     # Read-eval-print-loop: loops until the program is exited. Receives user input and returns the result of the expression
     while True:
@@ -68,15 +70,25 @@ def read(user_input):
 def evaluate(expression):
     # Receives an expression and returns its result
     # ["+", "1", "2"] ==> "3"
+    
+    # Lists of length one evaluate to the single value inside
     if len(expression) == 1:
         return expression[0]
     
-    
-    pass
+    # Lists of other lengths are considered procedure calls
+    # The anonymous function below ensures evaluate will always receive a list
+    argument_list = list(map(lambda arg: arg if isinstance(arg, list) else [arg], expression[1:]))
+
+    # When receiving a procedure call, returns the result of the function applied with the evaluated arguments
+    return apply(expression[0], list(map(evaluate, argument_list)))
 
 def apply(procedure, arguments):
     # Receives a procedure with its arguments and return the result of the applied function
-    pass
+    if procedure in primitives:
+        return primitives[procedure](*arguments)
+    else:
+        # This part would include the user defined functions
+        return NotImplementedError
 
 if __name__ == "__main__":
     repl()
