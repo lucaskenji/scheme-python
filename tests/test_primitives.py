@@ -11,3 +11,8 @@ def test_primitive_add():
 def test_primitive_bad_add():
     with raises(TypeError):
         primitives["+"]("2", "+")
+
+def test_primitive_multiply():
+    assert primitives["*"]("2") == "2"
+    assert primitives["*"]("2", "3") == "6"
+    assert primitives["*"]("5", "2", "0") == "0"
