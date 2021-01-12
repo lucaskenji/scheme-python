@@ -1,21 +1,19 @@
 from functools import reduce
 
-def add(*args):
-    operands = []
+def convert_to_numbers(argument_list):
     try:
-        for operand in args:
-            operands.append(int(operand))
+        converted_args = list(map(lambda x: float(x) if "." in x else int(x), argument_list))
     except ValueError:
-        raise TypeError("All arguments to '+' must be numbers.")
+        raise TypeError("Expected number arguments, received string")
+        
+    return converted_args
+
+def add(*args):
+    operands = convert_to_numbers(args)
     return str(reduce(lambda a, b: a + b, operands))
 
 def multiply(*args):
-    operands = []
-    try:
-        for operand in args:
-            operands.append(int(operand))
-    except ValueError:
-        raise TypeError("All arguments to '*' must be numbers.")
+    operands = convert_to_numbers(args)
     return str(reduce(lambda a, b: a * b, operands))
 
 primitives = {
