@@ -1,7 +1,7 @@
 import sys
 from pytest import raises
 sys.path.append('..')
-from primitives import primitives, convert_to_numbers
+from primitives import primitives, convert_to_numbers, check_word_args
 
 def test_primitive_add():
     # Expects this procedure to add numbers up.
@@ -25,3 +25,15 @@ def test_primitive_subtract():
     assert primitives["-"]("2") == "2"
     assert primitives["-"]("1", "3") == "-2"
     assert primitives["-"]("4", "3", "0") == "1"
+
+def test_primitive_word_operations():
+    # Expects these word-manipulating procedures to return the correct values as words
+    assert primitives["first"]("'foobar") == "'f"
+    assert primitives["last"]("'foobar") == "'r"
+    assert primitives["butfirst"]("'foobar") == "'oobar"
+    assert primitives["butlast"]("'foobar") == "'fooba"
+
+def test_primitive_bad_word_operation_arg():
+    # Expects an error if a number argument is sent to a word-manipulating procedure
+    with raises(TypeError):
+        check_word_args(["'foo", "2"])

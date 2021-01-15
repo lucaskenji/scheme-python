@@ -9,6 +9,9 @@ def convert_to_numbers(argument_list):
 
     return converted_args
 
+def check_word_args(argument_list):
+    pass
+
 def create_basic_operation(calc_function):
     # Creates a function that receives arguments, applies calc_function consecutively and returns the result as string
     def basic_operation(*args):
