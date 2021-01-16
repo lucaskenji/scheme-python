@@ -18,31 +18,39 @@ def check_word_args(argument_list):
         except ValueError:
             continue
 
-def create_basic_operation(calc_function):
-    # Creates a function that receives arguments, applies calc_function consecutively and returns the result as string
-    def basic_operation(*args):
-        operands = convert_to_numbers(args)
-        return str(reduce(calc_function, operands))
-    return basic_operation
+def create_math_operation(calc_function, num_args):
+    # Creates a function that receives num_args arguments and returns the calculated number.
+    def math_operation(*args):
+        if len(args) != num_args and num_args != -1:
+            raise TypeError("Unexpected number of arguments; expected " + str(num_args) + ", received " + str(len(args)))
 
-def create_word_slicer(slice_function):
-    # Creates a function that receives one word as argument and returns a part of it(determined by slice_function).
-    def word_slicer(*args):
-        if len(args) != 1:
-            raise TypeError("This function takes exactly one argument; " + str(len(args)) + " given")
+        operands = convert_to_numbers(args)
+        return str(calc_function(*operands))
+    return math_operation
+
+def create_word_operation(word_function, num_args):
+    # Creates a function that receives num_args arguments and returns the manipulated word.
+    def word_operation(*args):
+        if len(args) != num_args and num_args != -1:
+            raise TypeError("Unexpected number of arguments; expected " + str(num_args) + ", received " + str(len(args)))
 
         check_word_args(args)
-        return slice_function(*args)
-    return word_slicer
+        return word_function(*args)
+    return word_operation
+
+def create_reduce_function(action):
+    # Returns a function that takes any number of arguments and consecutively applies an action to its arguments, returning a single value
+    return (lambda *args: reduce(action, args))
 
 primitives = {
-    "+": create_basic_operation((lambda a, b: a + b)),
-    "*": create_basic_operation((lambda a, b: a * b)),
-    "-": create_basic_operation((lambda a, b: a - b)),
-    "/": create_basic_operation((lambda a, b: a / b)),
-    "first": create_word_slicer((lambda word: word[0])),
-    "last": create_word_slicer((lambda word: word[-1])),
-    "butfirst": create_word_slicer((lambda word: word[1:])),
-    "butlast": create_word_slicer((lambda word: word[:-1])),
-    "quote": (lambda word: word[1:] if word[0] == "'" else word)
+    "+": create_math_operation(create_reduce_function((lambda a, b: a + b)), -1),
+    "*": create_math_operation(create_reduce_function((lambda a, b: a * b)), -1),
+    "-": create_math_operation(create_reduce_function((lambda a, b: a - b)), -1),
+    "/": create_math_operation(create_reduce_function((lambda a, b: a / b)), -1),
+    "first": create_word_operation((lambda word: word[0]), 1),
+    "last": create_word_operation((lambda word: word[-1]), 1),
+    "butfirst": create_word_operation((lambda word: word[1:]), 1),
+    "butlast": create_word_operation((lambda word: word[:-1]), 1),
+    "quote": (lambda word: word[1:] if word[0] == "'" else word),
+    "word": create_word_operation(create_reduce_function((lambda joined_word, next_word: joined_word + next_word)), -1)
 }

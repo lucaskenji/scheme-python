@@ -32,6 +32,7 @@ def test_primitive_word_operations():
     assert primitives["last"]("foobar") == "r"
     assert primitives["butfirst"]("foobar") == "oobar"
     assert primitives["butlast"]("foobar") == "fooba"
+    assert primitives["word"]("foo", "bar") == "foobar"
 
 def test_primitive_bad_word_operation_arg():
     # Expects an error if a number argument is sent to a word-manipulating procedure
