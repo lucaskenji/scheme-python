@@ -25,12 +25,6 @@ def create_basic_operation(calc_function):
         return str(reduce(calc_function, operands))
     return basic_operation
 
-def division(*args):
-    try:
-        return create_basic_operation((lambda a, b: a / b))(*args)
-    except ZeroDivisionError:
-        raise ZeroDivisionError("Cannot divide a number by zero.")
-
 def create_word_slicer(slice_function):
     # Creates a function that receives one word as argument and returns a part of it(determined by slice_function).
     def word_slicer(*args):
@@ -45,8 +39,7 @@ primitives = {
     "+": create_basic_operation((lambda a, b: a + b)),
     "*": create_basic_operation((lambda a, b: a * b)),
     "-": create_basic_operation((lambda a, b: a - b)),
-    "/": division,
-        # The four functions below ensure that the string is returned with a quote(') to represent a word.
+    "/": create_basic_operation((lambda a, b: a / b)),
     "first": create_word_slicer((lambda word: word[0])),
     "last": create_word_slicer((lambda word: word[-1])),
     "butfirst": create_word_slicer((lambda word: word[1:])),

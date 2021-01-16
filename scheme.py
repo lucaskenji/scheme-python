@@ -31,6 +31,7 @@ def read(user_input):
             if current_argument:
                 # Stops reading an argument when encountering a closed parenthesis.
                 if current_argument[0] == "'":
+                    # Arguments starting with a quote(') are transformed into (quote argument)
                     current_list.append(["quote", current_argument])
                 else:
                     current_list.append(current_argument)
@@ -52,6 +53,7 @@ def read(user_input):
             if current_argument:
                 # Stops reading an argument when encountering a space.
                 if current_argument[0] == "'":
+                    # Arguments starting with a quote(') are transformed into (quote argument)
                     current_list.append(["quote", current_argument])
                 else:
                     current_list.append(current_argument)
