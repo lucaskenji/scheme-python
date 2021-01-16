@@ -30,11 +30,11 @@ def read(user_input):
         elif character == ')':
             if current_argument:
                 # Stops reading an argument when encountering a closed parenthesis.
-                if current_argument[0] == "'":
-                    # Arguments starting with a quote(') are transformed into (quote argument)
-                    current_list.append(["quote", current_argument])
+                if current_argument == '"' == current_list[-1]:
+                    # Treats " " as a space
+                    current_list[-1] = " "
                 else:
-                    current_list.append(current_argument)
+                    current_list.append(read_argument(current_argument))
                 current_argument = ""
             
             try:
@@ -52,11 +52,11 @@ def read(user_input):
         elif character == ' ':
             if current_argument:
                 # Stops reading an argument when encountering a space.
-                if current_argument[0] == "'":
-                    # Arguments starting with a quote(') are transformed into (quote argument)
-                    current_list.append(["quote", current_argument])
+                if current_argument == '"' == current_list[-1]:
+                    # Treats " " as a space
+                    current_list[-1] = " "
                 else:
-                    current_list.append(current_argument)
+                    current_list.append(read_argument(current_argument))
                 current_argument = ""
         else:
             # Continues reading the argument
@@ -74,6 +74,13 @@ def read(user_input):
     # The other one isn't necessarily needed, but it's more convenient than handling the error cases that come without it. 
     [[parsed_exp]] = nested_stack
     return parsed_exp
+
+def read_argument(arg):
+    # Reads an argument starting with ' as (quote argument), otherwise just returns the argument
+    if arg[0] == "'":
+        return ["quote", arg]
+    else:
+        return arg
 
 def evaluate(expression):
     # Receives an expression and returns its result
