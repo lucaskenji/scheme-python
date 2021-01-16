@@ -47,8 +47,9 @@ primitives = {
     "-": create_basic_operation((lambda a, b: a - b)),
     "/": division,
         # The four functions below ensure that the string is returned with a quote(') to represent a word.
-    "first": create_word_slicer((lambda word: word[:2])),
-    "last": create_word_slicer((lambda word: "'" + word[-1])),
-    "butfirst": create_word_slicer((lambda word: "'" + word[2:])),
-    "butlast": create_word_slicer((lambda word: word[:-1]))
+    "first": create_word_slicer((lambda word: word[0])),
+    "last": create_word_slicer((lambda word: word[-1])),
+    "butfirst": create_word_slicer((lambda word: word[1:])),
+    "butlast": create_word_slicer((lambda word: word[:-1])),
+    "quote": (lambda word: word[1:] if word[0] == "'" else word)
 }

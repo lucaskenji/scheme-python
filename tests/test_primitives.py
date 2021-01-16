@@ -28,10 +28,10 @@ def test_primitive_subtract():
 
 def test_primitive_word_operations():
     # Expects these word-manipulating procedures to return the correct values as words
-    assert primitives["first"]("'foobar") == "'f"
-    assert primitives["last"]("'foobar") == "'r"
-    assert primitives["butfirst"]("'foobar") == "'oobar"
-    assert primitives["butlast"]("'foobar") == "'fooba"
+    assert primitives["first"]("foobar") == "f"
+    assert primitives["last"]("foobar") == "r"
+    assert primitives["butfirst"]("foobar") == "oobar"
+    assert primitives["butlast"]("foobar") == "fooba"
 
 def test_primitive_bad_word_operation_arg():
     # Expects an error if a number argument is sent to a word-manipulating procedure

@@ -30,7 +30,10 @@ def read(user_input):
         elif character == ')':
             if current_argument:
                 # Stops reading an argument when encountering a closed parenthesis.
-                current_list.append(current_argument)
+                if current_argument[0] == "'":
+                    current_list.append(["quote", current_argument])
+                else:
+                    current_list.append(current_argument)
                 current_argument = ""
             
             try:
@@ -48,7 +51,10 @@ def read(user_input):
         elif character == ' ':
             if current_argument:
                 # Stops reading an argument when encountering a space.
-                current_list.append(current_argument)
+                if current_argument[0] == "'":
+                    current_list.append(["quote", current_argument])
+                else:
+                    current_list.append(current_argument)
                 current_argument = ""
         else:
             # Continues reading the argument
