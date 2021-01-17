@@ -105,5 +105,8 @@ def apply(procedure, arguments):
         # This part would include the user defined functions
         return NotImplementedError
 
+def get_environment(name, env):
+    pass
+
 if __name__ == "__main__":
     repl()
