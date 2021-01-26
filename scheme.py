@@ -1,9 +1,11 @@
 from primitives import primitives
 
+global_env = (primitives, None)
+
 def repl():
     # Read-eval-print-loop: loops until the program is exited. Receives user input and returns the result of the expression
     while True:
-        print(evaluate(read(input('> '))))
+        print(evaluate(read(input('> ')), global_env))
 
 def read(user_input):
     # Reads user input (expecting Scheme lists) and returns it as Python lists.
@@ -82,31 +84,40 @@ def read_argument(arg):
     else:
         return arg
 
-def evaluate(expression):
-    # Receives an expression and returns its result
+def evaluate(expression, environment):
+    # Receives an expression to evaluate in a given environment and returns its result
     # ["+", "1", "2"] ==> "3"
-    
-    # Lists of length one evaluate to the single value inside
+
+    firstexp_environment = get_environment(expression[0], environment)
+
     if len(expression) == 1:
+        if firstexp_environment is not None:
+            # TODO: make a function to get a function from a certain environment.
+            return firstexp_environment[0][expression[0]]
+        
+        print("Warning: the variable did not have a value bounded with its name.")
         return expression[0]
     
-    # Lists of other lengths are considered procedure calls
-    # The anonymous function below ensures evaluate will always receive a list
     argument_list = list(map(lambda arg: arg if isinstance(arg, list) else [arg], expression[1:]))
+    procedure_called = expression[0] if isinstance(expression[0], list) else [expression[0]]
+
+    if firstexp_environment is None:
+        raise NameError("Unbound procedure " + expression[0])
 
     # When receiving a procedure call, returns the result of the function applied with the evaluated arguments
-    return apply(expression[0], list(map(evaluate, argument_list)))
+    return apply(evaluate(procedure_called, environment), list(map(lambda arg: evaluate(arg, firstexp_environment), argument_list)))
 
 def apply(procedure, arguments):
-    # Receives a procedure with its arguments and return the result of the applied function
-    if procedure in primitives:
-        return primitives[procedure](*arguments)
-    else:
-        # This part would include the user defined functions
-        return NotImplementedError
+    return procedure(*arguments)
 
 def get_environment(name, env):
-    pass
+    if name in env[0]:
+        return env
+    
+    if env == global_env:
+        return None
+    
+    return get_environment(name, env[1])
 
 if __name__ == "__main__":
     repl()

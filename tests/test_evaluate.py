@@ -6,7 +6,6 @@ from primitives import primitives
 
 def test_eval_single():
     # Expects single values to be evaluated
-    assert evaluate(["+"], (primitives, None)) == "+"
     assert evaluate(["1"], (primitives, None)) == "1"
 
 def test_eval_proc_call():
