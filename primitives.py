@@ -9,15 +9,6 @@ def convert_to_numbers(argument_list):
 
     return converted_args
 
-def check_word_args(argument_list):
-    # Checks if a list of word arguments has any numbers and, if it does, raises an exception
-    for arg in argument_list:
-        try:
-            float(arg)
-            raise TypeError("Expected word arguments, received number")
-        except ValueError:
-            continue
-
 def create_math_operation(calc_function, num_args):
     # Creates a function that receives num_args arguments and returns the calculated number.
     def math_operation(*args):
@@ -34,7 +25,6 @@ def create_word_operation(word_function, num_args):
         if len(args) != num_args and num_args != -1:
             raise TypeError("Unexpected number of arguments; expected " + str(num_args) + ", received " + str(len(args)))
 
-        check_word_args(args)
         return word_function(*args)
     return word_operation
 
