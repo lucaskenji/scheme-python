@@ -89,6 +89,7 @@ def evaluate(expression, environment):
     # Receives an expression to evaluate in a given environment and returns its result
     # ["+", "1", "2"] ==> "3"
 
+    # Will be used to identify if we are evaluating a defined procedure
     firstexp_environment = get_environment(expression[0], environment)
 
     if len(expression) == 1:
@@ -97,13 +98,14 @@ def evaluate(expression, environment):
         
         return expression[0]
     
+    # More than 1 element on the list; considered a procedure call
     argument_list = list(map(lambda arg: arg if isinstance(arg, list) else [arg], expression[1:]))
     procedure_called = expression[0] if isinstance(expression[0], list) else [expression[0]]
 
     if firstexp_environment is None:
         raise NameError("Unbound procedure " + expression[0])
 
-    # When receiving a procedure call, returns the result of the function applied with the evaluated arguments
+    # Special forms like "define" are applied on a different function
     if expression[0] in special_forms:
         return apply_special_form(procedure_called, argument_list, environment)
     else:
@@ -121,6 +123,7 @@ def apply_special_form(procedure, arguments, env):
         raise NotImplementedError
 
 def get_environment(name, env):
+    # Searches an assigned value for a given name. If not found, tries again on an enclosing environment, until it reaches the global env.
     if name in env[0]:
         return env
     
