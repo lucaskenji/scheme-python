@@ -12,10 +12,6 @@ def read(user_input):
     # Reads user input (expecting Scheme lists) and returns it as Python lists.
     # (+ 1 2) ==> ['+', '1', '2']
 
-    if len(user_input) == 1:
-        # Edge case, '+' should be later evaluated to 'PrimitiveProcedure', etc.
-        return [user_input]
-
     nested_stack = [] # TODO: abstract into stack. Used to handle nested expressions.
     current_list = []
     parenthesis_stack = [] # TODO: abstract into stack.
@@ -71,7 +67,10 @@ def read(user_input):
     
     if current_argument:
         # Usually will happen when the user input does not end with a parenthesis.
-        raise SyntaxError("Unexpected end of expression while reading")
+        if nested_stack == [[]]:
+            return [current_argument]
+        else:
+            raise SyntaxError("Unexpected end of expression while reading")
     
     # Must remove result from two arrays. The outermost one is needed for the stack implementation as an array.
     # The other one isn't necessarily needed, but it's more convenient than handling the error cases that come without it. 
