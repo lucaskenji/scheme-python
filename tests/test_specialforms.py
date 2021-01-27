@@ -16,6 +16,6 @@ def test_define_new_var():
 
 def test_define_assign():
     # Expects a new value to be assigned into a previously defined variable
-    test_env ({"a": "1"}, None)
+    test_env = ({"a": "1"}, None)
     special_forms["define"](test_env, "a", "3")
     assert test_env[0]["a"] == "3"

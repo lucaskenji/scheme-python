@@ -1,6 +1,7 @@
 from primitives import primitives
+from special_forms import special_forms
 
-global_env = (primitives, None)
+global_env = ({**primitives, **special_forms}, None)
 
 def repl():
     # Read-eval-print-loop: loops until the program is exited. Receives user input and returns the result of the expression
@@ -92,10 +93,8 @@ def evaluate(expression, environment):
 
     if len(expression) == 1:
         if firstexp_environment is not None:
-            # TODO: make a function to get a function from a certain environment.
             return firstexp_environment[0][expression[0]]
         
-        print("Warning: the variable did not have a value bounded with its name.")
         return expression[0]
     
     argument_list = list(map(lambda arg: arg if isinstance(arg, list) else [arg], expression[1:]))
@@ -105,10 +104,21 @@ def evaluate(expression, environment):
         raise NameError("Unbound procedure " + expression[0])
 
     # When receiving a procedure call, returns the result of the function applied with the evaluated arguments
-    return apply(evaluate(procedure_called, environment), list(map(lambda arg: evaluate(arg, firstexp_environment), argument_list)))
+    if expression[0] in special_forms:
+        return apply_special_form(procedure_called, argument_list, environment)
+    else:
+        return apply(evaluate(procedure_called, environment), list(map(lambda arg: evaluate(arg, firstexp_environment), argument_list)))
 
 def apply(procedure, arguments):
     return procedure(*arguments)
+
+def apply_special_form(procedure, arguments, env):
+    if procedure[0] == "define":
+        variable_name = arguments[0][0]
+        evaluated_args = list(map(lambda arg: evaluate(arg, env), arguments[1:]))
+        return evaluate(procedure, env)(env, variable_name, *evaluated_args)
+    else:
+        raise NotImplementedError
 
 def get_environment(name, env):
     if name in env[0]:
